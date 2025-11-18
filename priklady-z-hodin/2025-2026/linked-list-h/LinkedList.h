@@ -14,7 +14,7 @@ public:
     LinkedList(const std::string &filename);
     void vypisSeznam();
     void pridejStudentaNaKonec(Student new_Student);
-    // void setridSeznamPodlePrumeru();
+    void setridSeznamPodlePrumeru();
     ~LinkedList();
     friend std::ostream& operator<<(std::ostream& out, LinkedList& m);
 };
