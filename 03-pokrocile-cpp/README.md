@@ -23,5 +23,8 @@ Nakonec se podíváme na moderní prvky C++, jako jsou šablony, výjimky a stan
 | 09 | [Přetěžování operátorů](./09-pretezovani-operatoru/) | Přetížení aritmetických, relačních a dalších operátorů pro vlastní třídy. |
 | 10 | [Hlavičkové soubory](./10-hlavickove-soubory/)|Rozdělení kód ud dílčích celků (hlavičkových a zdrojových souborů)|
 | 11 | [Šablony (Templates)](./11-sablony/) | Funkční šablony, třídní šablony, obecné programování. |
-| 12 | `Statické členy` | Statické atributy a metody, jejich využití. |
+| 12 | [Statické členy](./12-staticke-cleny/) | Statické atributy a metody, jejich využití. |
 | 13 | [Úvod do STL](./13-uvod-do-stl/) | Základní kontejnery (`vector`, `list`, `map`), iterátory a algoritmy. |
+| 14 | [Smart pointers](./14-smart-pointers/) | Moderní a bezpečná alternativa k ukazatelům. |
+| 15 | [Lambda a algoritmy](./15-lambda-a-algoritmy/) | Představení konceptu lambda funkce a jejího využití. |
+| 16 | [Regulární výrazy](./16-regularni-vyrazy/) | Úvod do regulárních výrazů v cpp | 

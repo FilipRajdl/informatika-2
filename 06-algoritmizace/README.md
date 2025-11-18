@@ -10,7 +10,7 @@ Tato sekce je rozdělena do několika logických celků. Každý celek bude obsa
 
 | Část | Adresář | Téma |
 | :--- | :--- | :--- |
-| 1 | [01-zakladni-algoritmy/](./01-zakladni-algoritmy/) | Řazení, vyhledávání a rekurze. |
-| 2 | `02-grafove-algoritmy/` | BFS, DFS, Dijkstra. *(bude doplněno)* |
+| 1 | [`01-zakladni-algoritmy/`](./01-zakladni-algoritmy/) | Řazení, vyhledávání a rekurze. |
+| 2 | [`02-grafove-algoritmy/`](./02-grafove-algoritmy/) | BFS, DFS, Dijkstra. |
 | 3 | `03-dalsi-techniky/` | Rozděl a panuj, Dynamické programování, Hladové algoritmy. *(bude doplněno)* |
-| 4 | `04-analyza-slozitosti/` | Notace Big O. *(bude doplněno)* |
+| 4 | [`04-analyza-slozitosti/`](./04-analyza-slozitosti/) | Notace Big O. |

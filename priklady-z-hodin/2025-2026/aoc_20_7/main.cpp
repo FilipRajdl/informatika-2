@@ -63,14 +63,42 @@ void printRules() {
     }
 }
 
+void find_1(std::string hledany) {
+    for (const auto pair : pravidla) {
+        const std::string pravidlo = pair.first;
+        const InnerMap obsah = pair.second;
+
+        if (obsah.count(hledany)) {
+            if (gold.find(pravidlo) == gold.end()) {
+                gold.insert(pravidlo);
+                find_1(pravidlo);
+            }
+        }
+    }
+}
+
+long long find_2(std::string hledany){
+    long long suma = 0;
+    for(auto vnitrni: pravidla[hledany]){
+        if (vnitrni.first == "other bags.") {
+            return 0;
+        }
+        suma += std::stoi(vnitrni.second) * find_2(vnitrni.first);
+        suma += std::stoi(vnitrni.second);
+    }
+    return suma;
+}
 
 int main() {
     try {
-        parseRules("test.txt");
-        printRules();
+        parseRules("rules.txt");
+        // printRules();
 
-//         std::cout<<find_1("shiny gold")<<std::endl;
-//         std::cout << gold.size() << std::endl;
+        // find_1("shiny gold");
+        // std::cout << gold.size() << std::endl;
+
+        std::cout<<find_2("shiny gold")<<std::endl;
+
 
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
