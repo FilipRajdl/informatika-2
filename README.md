@@ -27,11 +27,10 @@ Materiály jsou organizovány do číslovaných adresářů podle témat probír
 * [`01-uvodni-hodina/`](./01-uvodni-hodina/README.md): Úvodní informace k předmětu, cíle, hodnocení, harmonogram. **Začněte zde!**
 * [`02-zaklady-cpp/`](./02-zaklady-cpp/README.md): Materiály k základům jazyka C++.
 * [`03-pokrocile-cpp/`](./03-pokrocile-cpp/README.md): Materiály k OOP, šablonám a STL v C++.
-* [`06-algoritmizace/`](./06-algoritmizace/README.md): Materiály shrnující klíčové koncepty algoritmizace.
-<!--
 * [`04-zaklady-python/`](./04-zaklady-python/README.md): Materiály k základům jazyka Python.
-* [`05-pokrocile-python/`](./05-pokrocile-python/README.md): Materiály k OOP a knihovnám v Pythonu.
-* `motivacni-priklad-knihovna/`: Kompletní kód motivačního příkladu (Python backend, React frontend, PostgreSQL, Docker). -->
+* [`06-algoritmizace/`](./06-algoritmizace/README.md): Materiály shrnující klíčové koncepty algoritmizace.
+* <!--
+* [`05-pokrocile-python/`](./05-pokrocile-python/README.md): Materiály k OOP a knihovnám v Pythonu. -->
 
 *(Struktura se může v průběhu semestru mírně upravovat)*
 

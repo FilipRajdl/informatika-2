@@ -56,7 +56,10 @@
         "variant": "cpp",
         "chrono": "cpp",
         "list": "cpp",
-        "ratio": "cpp"
+        "ratio": "cpp",
+        "cstring": "cpp",
+        "bitset": "cpp",
+        "regex": "cpp"
     },
     "cmake.sourceDirectory": "/workspaces/Ukoly2024/Ukol_1/cpp"
 }
