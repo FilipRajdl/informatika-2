@@ -30,7 +30,7 @@ for i in range(5):
 
 Řetězec je v Pythonu sekvence znaků, takže ho můžeme procházet znak po znaku.
 
-```
+```python
 for znak in "Python":  
     print(znak)
 ```

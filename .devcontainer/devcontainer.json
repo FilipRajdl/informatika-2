@@ -8,13 +8,14 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-            	"ms-vsliveshare.vsliveshare",
+				"ms-vsliveshare.vsliveshare",
 				"eamodio.gitlens",
 				"ms-vscode.cpptools-extension-pack",
 				"ms-python.vscode-pylance",
 				"ms-python.python",
 				"ms-python.debugpy",
-				"ms-python.autopep8"
+				"ms-python.autopep8",
+				"ms-toolsai.jupyter"
 			]
 		}
 	},
