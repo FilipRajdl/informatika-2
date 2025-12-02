@@ -11,8 +11,8 @@ Datové struktury jsou kontejnery, které organizují a ukládají data. V Pytho
 | **Množina** | `set` | `{}` | Ne* | Ano | **Ano** |
 | **Slovník** | `dict` | `{k:v}` | Ano** | Ano | Ano (klíče) |
 
-* Množiny nejsou indexované.  
-* Od Pythonu 3.7 jsou slovníky seřazené podle pořadí vložení.*
+*\* Množiny nejsou indexované.  
+*\*\* Od Pythonu 3.7 jsou slovníky seřazené podle pořadí vložení.*
 
 ## **1. Seznam (List)**
 
