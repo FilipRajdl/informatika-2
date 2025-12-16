@@ -29,6 +29,63 @@ Operační systém obsahuje **Plánovač (Scheduler)**. Ten velmi rychle stříd
 * **Paralelismus:** Vlákna běží fyzicky ve stejný okamžik na různých jádrech.  
 * **Konkurence (Concurrency):** Vlákna se střídají na jednom jádře tak rychle, že to vyvolává iluzi paralelismu.
 
+### **1.1 Detailnější pohled na Scheduling a priority**
+
+Plánovač (Scheduler) operačního systému je klíčová komponenta, která rozhoduje, které vlákno dostane v daný okamžik přidělený čas procesoru. Jeho cílem je balancovat několik protichůdných požadavků:
+
+*   **Spravedlnost (Fairness):** Každé vlákno by mělo dostat svůj spravedlivý podíl času.
+*   **Efektivita (Throughput):** Maximalizovat počet úloh dokončených za časovou jednotku.
+*   **Odezva (Responsiveness):** Minimalizovat čas, než systém zareaguje na událost (např. kliknutí myší).
+
+#### **Stavy vlákna**
+
+Každé vlákno se nachází v jednom z několika stavů:
+1.  **Nové (New):** Vlákno bylo vytvořeno, ale plánovač ho ještě nezařadil do fronty ke spuštění.
+2.  **Běžící (Running):** Vlákno právě vykonává instrukce na jádře procesoru.
+3.  **Připravené (Runnable/Ready):** Vlákno je připraveno běžet, ale čeká ve frontě, až ho plánovač vybere.
+4.  **Blokované (Blocked/Waiting):** Vlákno nemůže běžet, protože čeká na nějakou externí událost. Například:
+    *   Čekání na dokončení I/O operace (čtení z disku).
+    *   Čekání na uvolnění mutexu, který drží jiné vlákno.
+    *   Uspané pomocí `std::condition_variable::wait`. 
+    V tomto stavu vlákno **nespotřebovává CPU čas**.
+5.  **Ukončené (Terminated):** Vlákno dokončilo svou práci.
+
+#### **Preemptivní vs. Kooperativní plánování**
+
+*   **Preemptivní plánování (Preemptive Scheduling):** Používají ho všechny moderní OS (Windows, Linux, macOS). Plánovač může běžící vlákno **kdykoliv přerušit** (typicky po uplynutí krátkého časového úseku, tzv. *time slice* nebo *quantum*) a spustit jiné. To zaručuje, že jedno špatně napsané vlákno nezamrazí celý systém.
+*   **Kooperativní plánování (Cooperative Scheduling):** Starší přístup. Vlákno běží, dokud se **samo dobrovolně nevzdá** procesoru (např. zavoláním funkce `yield()` nebo při čekání na I/O). Je jednodušší na implementaci, ale velmi křehké.
+
+#### **Priority vláken**
+
+Většina OS umožňuje přiřadit vláknům priority. Je to ale pouze **doporučení (hint)** pro plánovač.
+*   Vlákno s vyšší prioritou má **větší šanci**, že bude spuštěno dříve a dostane více času než vlákno s nižší prioritou.
+*   **Není to záruka!** Plánovač se stále snaží být spravedlivý a zabránit hladovění (starvation) vláken s nízkou prioritou.
+*   Přímá manipulace s prioritami je v C++ komplikovaná a závislá na platformě (`pthread_setschedparam` na Linuxu, `SetThreadPriority` na Windows). Obvykle je lepší nechat to na OS.
+
+Ačkoliv se konkrétní implementace liší, operační systémy obvykle nabízejí několik úrovní priorit, které lze zhruba rozdělit takto:
+
+*   **Nečinná (Idle):** Nejnižší možná priorita. Vlákna běží, pouze pokud systém nemá absolutně nic jiného na práci.
+*   **Nízká (Low / Below Normal):** Pro dlouhotrvající úlohy na pozadí, které nejsou kritické na čas (např. indexování souborů).
+*   **Normální (Normal):** Výchozí priorita pro většinu uživatelských aplikací a jejich vláken. Plánovač se snaží mezi nimi spravedlivě rozdělovat čas.
+*   **Vysoká (High / Above Normal):** Pro vlákna, která potřebují rychlejší odezvu, například vlákno obsluhující uživatelské rozhraní, aby aplikace "nezamrzala".
+*   **Kritická / Reálného času (Time-Critical / Real-time):** Nejvyšší priorita. Používá se pro úlohy, kde je zpoždění nepřijatelné (např. přehrávání zvuku/videa, řízení hardwaru). **Pozor:** Nesprávné použití vláken s touto prioritou může vést k "hladovění" ostatních, i systémových, procesů a způsobit nestabilitu celého systému.
+
+**Problém: Inverze priorit (Priority Inversion)**
+Jde o nebezpečnou situaci, kdy vlákno s vysokou prioritou je nepřímo blokováno vláknem s nízkou prioritou.
+1.  Vlákno L (nízká priorita) zamkne mutex M.
+2.  Plánovač přeruší L a spustí vlákno H (vysoká priorita).
+3.  Vlákno H se pokusí zamknout mutex M, ale musí čekat, až ho L uvolní. H se zablokuje.
+4.  Nyní je připraveno ke spuštění vlákno M (střední priorita). Protože má vyšší prioritu než L, plánovač spustí M.
+*Výsledek:* Vlákno H s vysokou prioritou čeká, protože běží vlákno M se střední prioritou, které brání v běhu vláknu L, jež by uvolnilo zdroj pro H.
+
+**Řešení:** *Priority Inheritance*. Když H začne čekat na mutex držený L, OS dočasně zvýší prioritu L na úroveň H. Tím zajistí, že L nebude přerušeno vláknem M, rychle dokončí svou práci, uvolní mutex a umožní běh H. Mutexy v moderních OS toto často implementují.
+
+#### **CPU Afinita (CPU Affinity)**
+
+Afinita znamená "připnutí" vlákna na konkrétní jádro (nebo skupinu jader) procesoru.
+*   **Proč?** Kvůli cache. Když vlákno běží, jeho data se načtou do rychlé L1/L2 cache daného jádra. Pokud plánovač přesune vlákno na jiné jádro, tato cache je "studená" a data se musí znovu načítat z pomalejší paměti. Připnutím vlákna se lze vyhnout těmto tzv. *cache misses*.
+*   **Kdy?** Jde o pokročilou optimalizační techniku. Většinou je lepší nechat rozhodnutí na plánovači, který má globální přehled o vytížení systému. Používá se ve specializovaných, vysoce výkonných aplikacích (např. real-time systémy, vědecké výpočty).
+
 ### **Realita výkonu: Amdahlův zákon**
 
 Častým omylem je, že pokud program běží na 4jádrovém procesoru, bude 4× rychlejší. To v praxi téměř nikdy neplatí. Maximální možné zrychlení je limitováno tou částí programu, která **musí běžet sériově** (nelze paralelizovat – např. načítání souboru, inicializace, sčítání dílčích výsledků).
